@@ -1,21 +1,14 @@
 class Order {
-  constructor(food, drink) {
-    this.food = food;
-    this.drink = drink; // do not know what they are ordering, but they will get two things
-  }
-}
-class Person {
-  constructor(name) {
-    this.name = name; // we do not know the name of the person ordering (default)
-    this.personName = []; ///default value of empty array, is not needed in the constructor/ array will
-    //hold all the orders for each person
+  constructor(owner, name) {
+    this.owner = owner;
+    this.name = name; // do not know what they are ordering, but they will get two things
   }
 }
 
 class Menu {
   constructor() {
-    this.meal = []; //this array will hold all meals.
-    this.selectedMeal = null; //selector for order. Starts at null bc nothing is selected by default.
+    this.orders = []; //this array will hold all meals.
+    //this.selectedMeal = null; //selector for order. Starts at null bc nothing is selected by default.
   }
   // class newDrink {
   //constructor() {
@@ -30,14 +23,12 @@ class Menu {
 
   start() {
     let selection = this.showMainMenuOptions();
+
     while (selection != 0) {
       switch (selection) {
         case "1":
-          this.enterPersonName(); 
-          break;  //ask for name and food and drink
-          case "1":
-          this.enterMealOptions(); 
-          break;
+          this.enterPersonName();
+          break; //ask for name and food and drink
         case "2":
           this.viewOrder(); // show order list of names
           break;
@@ -55,23 +46,26 @@ class Menu {
   showMainMenuOptions() {
     return prompt(`
               0) Not hungry
-              1) enter your name
+              1) create order
               2) view order
               3) delete order
              
               `);
   }
 
-  enterPersonName(nameInfo) {
-    return prompt(`
-              0) enter name
-              
-              ------------------
-              ${nameInfo}
-              `);
-  }
+  enterPersonName() {
+    let name = prompt(` What is your name?`);
 
-  enterMealOptions(mealInfo) {
+    let selection = this.showMealOptions(name);
+    switch (selection) {
+      case "1":
+        this.enterFood(name);
+        break;
+      case "0":
+        this.enterDrink(name);
+    }
+  }
+  showMealOptions(mealInfo) {
     return prompt(`
             0) enter drink
             1) enter food
@@ -83,50 +77,61 @@ class Menu {
   }
 
   //createOrderName(person) {
-    //let orderName = prompt("Enter your name: ");
-    //this.personName.push(new personName(name));
-  //} 
+  //let orderName = prompt("Enter your name: ");
+  //this.personName.push(new personName(name));
+  //}
 
-  enterFoodOrder(order) {
-    let foodOrder = prompt("Enter your food order: ");
+  enterFood(name) {
+    let food = prompt("Enter your food order: ");
+    this.orders.push(new Order(name, food));
+    alert("Food order has been created successfully");
   }
 
-  enterDrinkOrder(drink) {
-    let drinkOrder = prompt("Enter your drink: ");
+  enterDrink(name) {
+    let drink = prompt("Enter your drink: ");
+    //this.orders.push(name + " " + drink);
+    this.orders.push(new Order(name, drink));
+    alert("Drink order has been created successfully");
   }
 
   deleteOrder() {
     let index = prompt("Enter the index of the order you wish to cancel:");
-    if (index > -1 && index < this.mealOrder.length) {
-      this.mealOrder.splice(index, 1);
+    if (index > -1 && index < this.orders.length) {
+      this.orders.splice(index, 1);
+      alert("Order" + index + " has been deleted");
+    } else {
+      alert("order does  not exist");
     }
   }
 
   viewOrder() {
     let index = prompt("Enter the index of the order you wish to view");
-    if (index > -1 && index < this.personName.length) {
-      this.selectedMeal = this.mealOrder[index];
-      let description = "Food order" + this.selectedMeal.name + "\n";
+    if (index > -1 && index < this.orders.length) {
+      // this.selectedMeal = this.mealOrder[index];
+      // let description = "Food order" + this.selectedMeal.name + "\n";
 
-      for (let i = 0; i < this.selectedMeal.length; i++) {
-        description +=
-          i +
-          ") " +
-          this.selectedMeal[i].name +
-          " - " +
-          this.selectedMeal[i].position +
-          "\n";
-      }
+      //for (let i = 0; i < this.selectedMeal.length; i++) {
+      //  description +=
+      //   i +
+      //   ") " +
+      //   this.selectedMeal[i].name +
+      //   " - " +
+      //   this.selectedMeal[i].position +
+      //   "\n";
+      alert(this.orders[index].name + " " + this.orders[index].owner);
+    } else {
+      alert("Order does not exist.");
+    }
 
-      //let selection = this.showTeamMenuOptions(description);
-      //switch (selection) {
-       // case "1":
-       //   this.createPlayer();
-        //  break;
-        //case "2":
-       //   this.deletePlayer();
-      //}
-   // }
+    //let selection = this.showTeamMenuOptions(description);
+    //switch (selection) {
+    // case "1":
+    //   this.createPlayer();
+    //  break;
+    //case "2":
+    //   this.deletePlayer();
+    //}
+    // }
   }
 }
 
